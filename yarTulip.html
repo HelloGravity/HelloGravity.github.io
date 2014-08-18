@@ -12,10 +12,13 @@
 	<a href="/">Click Here To go to the main menu</a>
     <script type="text/javascript">
     var player, background;
+    var TOP = true, BOTTOM = false;
+    var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update : update });
+    var currentWave = [];
     window.onload = function() {
-    	var TOP = true, BOTTOM = false;
+    	
         
-        var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update : update });
+        
 
         function preload () {
             game.load.image('background', 'background.png');
@@ -27,6 +30,7 @@
             background.anchor.setTo(0.5, 0.5);
             player = game.add.sprite(80, 223, 'player');
             setPlayerPosition(TOP);
+
         }
 
         function setPlayerPosition(pos) {
@@ -35,6 +39,10 @@
             } else if (pos == BOTTOM) {
                 player.position.y = 223;
             }
+        }
+
+        function startWave() {
+
         }
 
         function update() {
