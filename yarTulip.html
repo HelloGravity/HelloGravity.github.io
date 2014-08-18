@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>hello phaser!</title>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
+        <script src="phaser.min.js"></script>
+    </head>
+    <body>
+	<h1>Hello World</h1>
+	<p>I'm hosted with GitHub Pages.</p>
+	<a href="/">Click Here To go to the main menu</a>
+    <script type="text/javascript">
+
+    window.onload = function() {
+    	var TOP = true, BOTTOM = false;
+        var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create });
+
+        function preload () {
+
+            game.load.image('background', 'background.png');
+
+        }
+
+        function create () {
+
+            var background = game.add.sprite(game.world.centerX, game.world.centerY, 'background');
+            background.anchor.setTo(0.5, 0.5);
+
+        }
+
+
+        var waveTypes = [ /*Every two values inside an array are : TOP/BOTTOM, later distance (in block widths) */
+        	[TOP, 1, TOP, 1, BOTOM, 0], 
+        	[TOP, 1.5, TOP, 1.2, BOTTOM, 1, BOTTOM, 1, BOTTOM, 1, TOP, 0],
+        	[TOP, 0.4, TOP, 0.4, TOP, 2, BOTTOM, 2, TOP, 1, BOTTOM, 1, TOP, 0],
+        	[TOP, 1, TOP, 1, BOTTOM, 0],
+        	[TOP, 1, BOTTOM, 1, TOP, 0],
+        	[TOP, 1, TOP, 1, TOP, 0]
+        ];
+    };
+
+    </script>
+
+    </body>
+</html>
