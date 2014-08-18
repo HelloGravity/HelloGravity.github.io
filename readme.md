@@ -1,0 +1,1 @@
+This is a website, made specifically for the ludum dare competition.
