@@ -29,7 +29,7 @@
             for (i = 1; i < sequence1.length; i++) {
                 if (sequence1[i] == 1) {
                     blockSequence1[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY,'up');
-                    blockSequence1[i].y -= blockSequence1[i].height;
+                    blockSequence1[i].y -= (blockSequence1[i].height+1);
                 }
                 if (sequence1[i] == -1) {
                     blockSequence1[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY,'down');
