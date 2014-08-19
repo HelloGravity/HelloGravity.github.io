@@ -56,7 +56,9 @@
         }
 
         function update () {
-            time += game.time.elapsed/1000;
+	    if(!game.paused) {
+		time += game.time.elapsed/1000;
+            }
 	    if (time > bestTime) {
 		bestTime = time;
             }
