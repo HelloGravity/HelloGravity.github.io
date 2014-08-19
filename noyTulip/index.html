@@ -48,9 +48,15 @@
             for (i = 1; i < blockSequence1.length; i++) {
                 if (sequence1[i] != 0) {
                     blockSequence1[i].x -= sequence1[0];
+
+                    if (Phaser.Rectangle.intersects(player.getBounds(), blockSequence1[i].getBounds())) {
+                        player.alpha = 0;
+                    }
                 }
             }
         }
+
+
     };
 
     </script>
