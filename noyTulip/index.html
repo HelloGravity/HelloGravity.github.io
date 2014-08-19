@@ -20,6 +20,10 @@
         var sequence4 = [5,1,0,0,-1,-1,0,0,0,1,1];
 	var sequences = [sequence1,sequence2,sequence3,sequence4];
 
+	var time = 0;
+	var bestTime = 0;
+	var score;
+
 	var num;
 
         function preload () {
@@ -32,6 +36,9 @@
             player = game.add.sprite(300,game.world.centerY,'player');
             player.y -= player.height;
             
+	    time = 0;
+	    score = game.add.text(400, 280, "", {fill : "white", font : "30px Arial"});
+
             blockSequence = [];
 
             for (i = 1; i < sequence1.length; i++) {
@@ -49,6 +56,12 @@
         }
 
         function update () {
+            time += game.time.elapsed/1000;
+	    if (time > bestTime) {
+		bestTime = time;
+            }
+	    score.text = "Current Time: " + time.toFixed(1) + " seconds\nBest Time: " + bestTime.toFixed(1)  + " seconds";
+
             if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
                 player.y = game.world.centerY;
             }
@@ -61,7 +74,13 @@
                     blockSequence[i].x -= sequence1[0];
 
                     if (Phaser.Rectangle.intersects(player.getBounds(), blockSequence[i].getBounds())) {
-                        player.alpha = 0;
+			player.destroy();
+			for (j = 1; j < blockSequence.length; j++) {
+			    if (blockSequence[j] != 0) {
+				blockSequence[j].destroy();
+			    }
+			score.destroy();
+                        create();
                     }
                 }
             }
