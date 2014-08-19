@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <title>hello phaser!</title>
-        <script src="../phaser.min.js"></script>
+        <script src="phaser.min.js"></script>
     </head>
     <body>
 
@@ -11,27 +11,46 @@
 
     window.onload = function() {
 
-        var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+        var game = new Phaser.Game(800, 400, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+        
+        var sequence1 = [5,1,0,0,-1,0,-1,0,0,0,1]; //first value is velocity, 1 is up, -1 is down, 0 is nothing
 
         function preload () {
             game.load.image('player', 'player.png');
+            game.load.image('up', 'up.png');
+            game.load.image('down', 'down.png');
         }
 
         function create () {
-            player = game.add.sprite(300,game.world.centerY-50,'player');
+            player = game.add.sprite(300,game.world.centerY,'player');
+            player.y -= player.height;
+
+            blockSequence1 = new Array(sequence1.length);
+            for (i = 1; i < sequence1.length; i++) {
+                if (sequence1[i] == 1) {
+                    blockSequence1[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY,'up');
+                    blockSequence1[i].y -= blockSequence1[i].height;
+                }
+                if (sequence1[i] == -1) {
+                    blockSequence1[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY,'down');
+                }
+            }
         }
 
         function update () {
-            if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-            {
+            if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
                 player.y = game.world.centerY;
             }
-            else
-            {
-                player.y = game.world.centerY-50;
+            else {
+                player.y = game.world.centerY-player.height;
+            }
+
+            for (i = 1; i < blockSequence1.length; i++) {
+                if (sequence1[i] != 0) {
+                    blockSequence1[i].x -= sequence1[0];
+                }
             }
         }
-
     };
 
     </script>
