@@ -11,49 +11,53 @@
 	<p>I'm hosted with GitHub Pages.</p>
 	<a href="/">Click Here To go to the main menu</a>
     <script type="text/javascript">
+    var BLOCK_WIDTH = 49;
+    var TOP_Y_POSITION = 223-85, BOTTOM_Y_POSITION = 223;
     var player, background;
     var TOP = true, BOTTOM = false;
     var game;
-    var currentWave = [];
+    var currentWaveItems = [];
     window.onload = function() {
     	game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update : update });
 
         function preload () {
             game.load.image('background', 'background.png');
             game.load.image('player', 'player.png');
+            game.load.image('top', 'top.png');
+            game.load.image('bottom', 'bottom.png');
         }
 
         function create () {
             background = game.add.sprite(game.world.centerX, game.world.centerY, 'background');
             background.anchor.setTo(0.5, 0.5);
             player = game.add.sprite(80, 223, 'player');
-            setPlayerPosition(TOP);
-
-        }
-
-        function setPlayerPosition(pos) {
-            if(pos == TOP) { 
-                player.position.y = 223-85;
-            } else if (pos == BOTTOM) {
-                player.position.y = 223;
-            }
+            startWave();
         }
 
         function startWave() {
-
+        	currentWaveItems = [];
+        	wave = waveTypes[game.rnd.between(0, waveTypes.length - 1)];
+        	var accumulatedWidth = 600;
+        	for(var i = 0; i < wave.length / 2; i++) {
+        		currentWaveItems[i] = game.add.sprite(accumulatedWidth, 223, wave[2*i] == TOP ? 'top' : 'bottom');
+        		currentWaveItems[i].y = (wave[2*i] == TOP) ? TOP_Y_POSITION : BOTTOM_Y_POSITION;
+        		accumulatedWidth += BLOCK_WIDTH * (1 + wave[2*i+1]);
+        		game.physics.enable(currentWaveItems[i], Phaser.Physics.ARCADE);
+        		currentWaveItems[i].body.velocity.x = -100;
+        	}
         }
 
         function update() {
-            setPlayerPosition(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) ? BOTTOM : TOP);
+            player.y = (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) ? BOTTOM_Y_POSITION : TOP_Y_POSITION);
         }
 
         var waveTypes = [ /*Every two values inside an array are : TOP/BOTTOM, later distance (in block widths) */
-        	[TOP, 1, TOP, 1, BOTTOM, 0], 
-        	[TOP, 1.5, TOP, 1.2, BOTTOM, 1, BOTTOM, 1, BOTTOM, 1, TOP, 0],
-        	[TOP, 0.4, TOP, 0.4, TOP, 2, BOTTOM, 2, TOP, 1, BOTTOM, 1, TOP, 0],
-        	[TOP, 1, TOP, 1, BOTTOM, 0],
-        	[TOP, 1, BOTTOM, 1, TOP, 0],
-        	[TOP, 1, TOP, 1, TOP, 0]
+        	[TOP, 1.2, TOP, 1.2, BOTTOM, 0], 
+        	[TOP, 1.7, TOP, 1.4, BOTTOM, 1.2, BOTTOM, 1.2, BOTTOM, 1.2, TOP, 0],
+        	[TOP, 0.6, TOP, 0.6, TOP, 2.2, BOTTOM, 2.4, TOP, 1.2, BOTTOM, 1.2, TOP, 0],
+        	[TOP, 1.2, TOP, 1.2, BOTTOM, 0],
+        	[TOP, 1.2, BOTTOM, 1.2, TOP, 0],
+        	[TOP, 1.2, TOP, 1.2, TOP, 0]
         ];
     };
 
