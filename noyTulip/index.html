@@ -14,10 +14,10 @@
         var game = new Phaser.Game(800, 400, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
         //first value is velocity, 1 is up, -1 is down, 0 is nothing
-        var sequence1 = [5,1,0,0,-1,0,-1,0,0,0,1];
-        var sequence2 = [5,1,1,1,0,-1,-1,0,0,0,1];
-        var sequence3 = [5,1,0,0,-1,0,1,0,-1,0,1];
-        var sequence4 = [5,1,0,-1,0,1,1,0,-1,0,1];
+        var sequence1 = [5,1,0,0,-1,0,0,-1,0,0,1];
+        var sequence2 = [5,1,1,0,0,-1,-1,0,0,0,1];
+        var sequence3 = [5,1,0,0,-1,-1,0,0,1,0,1];
+        var sequence4 = [5,1,0,0,-1,-1,0,0,1,1,0];
 	var sequences = [sequence1,sequence2,sequence3,sequence4];
 
 	var num;
