@@ -70,14 +70,14 @@
 		num = Math.floor(Math.random() * 4);
 		for (i = 1; i < sequences[num].length; i++) {
                     if (sequences[num][i] == 1) {
-                        blockSequence[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY-1,'up');
-                        blockSequence[i].y -= blockSequence[i].height;
+                        blockSequence[blockSequence.length] = game.add.sprite(game.world.width+player.width*i, game.world.centerY-1,'up');
+                        blockSequence[blockSequence.length-1].y -= blockSequence[blockSequence.length-1].height;
                     }
                     else if (sequences[num][i] == -1) {
-                        blockSequence[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY+1,'down');
+                        blockSequence[blockSequence.length] = game.add.sprite(game.world.width+player.width*i, game.world.centerY+1,'down');
                     }
 		    else {
-		        blockSequence[i] = 0;
+		        blockSequence[blockSequence.length] = 0;
 		    }
                 }
 	    }
