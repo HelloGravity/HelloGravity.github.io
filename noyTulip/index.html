@@ -12,8 +12,15 @@
     window.onload = function() {
 
         var game = new Phaser.Game(800, 400, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-        
-        var sequence1 = [5,1,0,0,-1,0,-1,0,0,0,1]; //first value is velocity, 1 is up, -1 is down, 0 is nothing
+
+        //first value is velocity, 1 is up, -1 is down, 0 is nothing
+        var sequence1 = [5,1,0,0,-1,0,-1,0,0,0,1];
+        var sequence2 = [5,1,1,1,0,-1,-1,0,0,0,1];
+        var sequence3 = [5,1,0,0,-1,0,1,0,-1,0,1];
+        var sequence4 = [5,1,0,-1,0,1,1,0,-1,0,1];
+	var sequences = [sequence1,sequence2,sequence3,sequence4];
+
+	var num;
 
         function preload () {
             game.load.image('player', 'player.png');
@@ -24,16 +31,20 @@
         function create () {
             player = game.add.sprite(300,game.world.centerY,'player');
             player.y -= player.height;
+            
+            blockSequence = [];
 
-            blockSequence1 = new Array(sequence1.length);
             for (i = 1; i < sequence1.length; i++) {
                 if (sequence1[i] == 1) {
-                    blockSequence1[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY-1,'up');
-                    blockSequence1[i].y -= blockSequence1[i].height;
+                    blockSequence[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY-1,'up');
+                    blockSequence[i].y -= blockSequence[i].height;
                 }
-                if (sequence1[i] == -1) {
-                    blockSequence1[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY+1,'down');
+                else if (sequence1[i] == -1) {
+                    blockSequence[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY+1,'down');
                 }
+		else {
+		    blockSequence[i] = 0;
+		}
             }
         }
 
@@ -45,15 +56,31 @@
                 player.y = game.world.centerY-player.height;
             }
 
-            for (i = 1; i < blockSequence1.length; i++) {
-                if (sequence1[i] != 0) {
-                    blockSequence1[i].x -= sequence1[0];
+            for (i = 1; i < blockSequence.length; i++) {
+                if (blockSequence[i] != 0) {
+                    blockSequence[i].x -= sequence1[0];
 
-                    if (Phaser.Rectangle.intersects(player.getBounds(), blockSequence1[i].getBounds())) {
+                    if (Phaser.Rectangle.intersects(player.getBounds(), blockSequence[i].getBounds())) {
                         player.alpha = 0;
                     }
                 }
             }
+
+	    if (blockSequence[blockSequence.length - 1].x < game.world.width) {
+		num = Math.floor(Math.random() * 4);
+		for (i = 1; i < sequences[num].length; i++) {
+                    if (sequences[num][i] == 1) {
+                        blockSequence[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY-1,'up');
+                        blockSequence[i].y -= blockSequence[i].height;
+                    }
+                    else if (sequences[num][i] == -1) {
+                        blockSequence[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY+1,'down');
+                    }
+		    else {
+		        blockSequence[i] = 0;
+		    }
+                }
+	    }
         }
 
 
