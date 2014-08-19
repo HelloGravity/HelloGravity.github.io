@@ -1,104 +1,104 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>hello phaser!</title>
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
-        <script src="../phaser.min.js"></script>
-    </head>
-    <body>
+	<head>
+		<meta charset="UTF-8" />
+		<title>hello phaser!</title>
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
+		<script src="../phaser.min.js"></script>
+	</head>
+	<body>
 	<h1>Hello World</h1>
 	<p>I'm hosted with GitHub Pages.</p>
 	<a href="/">Click Here To go to the main menu</a>
-    <script type="text/javascript">
-    var game, player, currentWaveItems, text;
+	<script type="text/javascript">
+	var game, player, currentWaveItems, text;
 
-    window.onload = function() {
-    	/*Constants*/
-    	var BLOCK_WIDTH = 49,
-    		TOP_Y_POSITION = 223-85,
-    		BOTTOM_Y_POSITION = 223,
-    		TOP = true,
-    		BOTTOM = false;
+	window.onload = function() {
+		/*Constants*/
+		var BLOCK_WIDTH = 49,
+			TOP_Y_POSITION = 223-85,
+			BOTTOM_Y_POSITION = 223,
+			TOP = true,
+			BOTTOM = false;
 
-    	/*Score is here, so it will not be easy to change it because of the function scope */
-    	var highScore = 0, 
-    		currentScore = 0,
-    		currentScoreMs = 0;
+		/*Score is here, so it will not be easy to change it because of the function scope */
+		var highScore = 0, 
+			currentScore = 0,
+			currentScoreMs = 0;
 
-    	game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update : update });
+		game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update : update });
 
-        function preload() {
-            game.load.image('background', 'background.png');
-            game.load.image('player', 'player.png');
-            game.load.image('top', 'top.png');
-            game.load.image('bottom', 'bottom.png');
-        }
+		function preload() {
+			game.load.image('background', 'background.png');
+			game.load.image('player', 'player.png');
+			game.load.image('top', 'top.png');
+			game.load.image('bottom', 'bottom.png');
+		}
 
-        function create() {
-            background = game.add.sprite(game.world.centerX, game.world.centerY, 'background');
-            background.anchor.setTo(0.5, 0.5);
-            player = game.add.sprite(80, 223, 'player');
-            game.physics.enable(player, Phaser.Physics.ARCADE);
-            gameBeginTime = game.time.now;
-            text = game.add.text(400, 500, "", {fill : "white", font : "30px Verdana"});
-            newWave();
-        }
+		function create() {
+			background = game.add.sprite(game.world.centerX, game.world.centerY, 'background');
+			background.anchor.setTo(0.5, 0.5);
+			player = game.add.sprite(80, 223, 'player');
+			game.physics.enable(player, Phaser.Physics.ARCADE);
+			gameBeginTime = game.time.now;
+			text = game.add.text(400, 500, "", {fill : "white", font : "30px Verdana"});
+			newWave();
+		}
 
- 		function update() {
-            player.y = game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) ? BOTTOM_Y_POSITION : TOP_Y_POSITION;
+		function update() {
+			player.y = game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) ? BOTTOM_Y_POSITION : TOP_Y_POSITION;
 
-            if(currentWaveItems[currentWaveItems.length-1].x + BLOCK_WIDTH < 0) {
-            	destroyWave();
-            	newWave();
-            }
+			if(currentWaveItems[currentWaveItems.length-1].x + BLOCK_WIDTH < 0) {
+				destroyWave();
+				newWave();
+			}
 
-            for(var i = 0; i < currentWaveItems.length; i++)
-        		if(game.physics.arcade.intersects(currentWaveItems[i].body, player.body)) {
-        			destroyWave();
-        			newWave();
-        			currentScoreMs = 0;
-        			break;
-        		}
-    		if(!game.paused)
-    			currentScoreMs += game.time.elapsed;
-            currentScore = currentScoreMs/1000;
-            if(currentScore > highScore)
-            	highScore = currentScore;
-            text.text = "Current Score : " + currentScore.toFixed(1) + "s\nHigh Score : " + highScore.toFixed(1)  + "s";
-        }
+			for(var i = 0; i < currentWaveItems.length; i++)
+				if(game.physics.arcade.intersects(currentWaveItems[i].body, player.body)) {
+					destroyWave();
+					newWave();
+					currentScoreMs = 0;
+					break;
+				}
+			if(!game.paused)
+				currentScoreMs += game.time.elapsed;
+			currentScore = currentScoreMs/1000;
+			if(currentScore > highScore)
+				highScore = currentScore;
+			text.text = "Current Score : " + currentScore.toFixed(1) + "s\nHigh Score : " + highScore.toFixed(1)  + "s";
+		}
 
-        function newWave() {
-        	currentWaveItems = [];
-        	wave = waveTypes[game.rnd.between(0, waveTypes.length - 1)];
-        	var accumulatedWidth = game.width;
-        	for(var i = 0; i < wave.length / 2; i++) {
-        		currentWaveItems[i] = game.add.sprite(accumulatedWidth, 223, wave[2*i] == TOP ? 'top' : 'bottom');
-        		currentWaveItems[i].y = (wave[2*i] == TOP) ? TOP_Y_POSITION : BOTTOM_Y_POSITION;
-        		accumulatedWidth += BLOCK_WIDTH * (1 + wave[2*i+1]);
-        		game.physics.enable(currentWaveItems[i], Phaser.Physics.ARCADE);
-        		currentWaveItems[i].body.velocity.x = -100;
+		function newWave() {
+			currentWaveItems = [];
+			wave = waveTypes[game.rnd.between(0, waveTypes.length - 1)];
+			var accumulatedWidth = game.width;
+			for(var i = 0; i < wave.length / 2; i++) {
+				currentWaveItems[i] = game.add.sprite(accumulatedWidth, 223, wave[2*i] == TOP ? 'top' : 'bottom');
+				currentWaveItems[i].y = (wave[2*i] == TOP) ? TOP_Y_POSITION : BOTTOM_Y_POSITION;
+				accumulatedWidth += BLOCK_WIDTH * (1 + wave[2*i+1]);
+				game.physics.enable(currentWaveItems[i], Phaser.Physics.ARCADE);
+				currentWaveItems[i].body.velocity.x = -100;
 
-        	}
-        }
+			}
+		}
 
-        function destroyWave() {
-        	for(var i = 0; i < currentWaveItems.length;i++)
-            		currentWaveItems[i].destroy();
-        	currentWaveItems = [];
-        }
+		function destroyWave() {
+			for(var i = 0; i < currentWaveItems.length;i++)
+					currentWaveItems[i].destroy();
+			currentWaveItems = [];
+		}
 
 		/*Every two values inside an array are : TOP/BOTTOM, later distance (in block widths) */
-        var waveTypes = [ 
-        	[TOP, 1.2, TOP, 1.2, BOTTOM, 0], 
-        	[TOP, 1.7, TOP, 1.4, BOTTOM, 1.2, BOTTOM, 1.2, BOTTOM, 1.2, TOP, 0],
-        	[TOP, 0.6, TOP, 0.6, TOP, 2.2, BOTTOM, 2.4, TOP, 1.2, BOTTOM, 1.2, TOP, 0],
-        	[TOP, 1.2, TOP, 1.2, BOTTOM, 0],
-        	[TOP, 1.2, BOTTOM, 1.2, TOP, 0],
-        	[TOP, 1.2, TOP, 1.2, TOP, 0]
-        ];
-    };
+		var waveTypes = [ 
+			[TOP, 1.2, TOP, 1.2, BOTTOM, 0], 
+			[TOP, 1.7, TOP, 1.4, BOTTOM, 1.2, BOTTOM, 1.2, BOTTOM, 1.2, TOP, 0],
+			[TOP, 0.6, TOP, 0.6, TOP, 2.2, BOTTOM, 2.4, TOP, 1.2, BOTTOM, 1.2, TOP, 0],
+			[TOP, 1.2, TOP, 1.2, BOTTOM, 0],
+			[TOP, 1.2, BOTTOM, 1.2, TOP, 0],
+			[TOP, 1.2, TOP, 1.2, TOP, 0]
+		];
+	};
 
-    </script>
-    </body>
+	</script>
+	</body>
 </html>
