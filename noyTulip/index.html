@@ -28,11 +28,11 @@
             blockSequence1 = new Array(sequence1.length);
             for (i = 1; i < sequence1.length; i++) {
                 if (sequence1[i] == 1) {
-                    blockSequence1[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY,'up');
-                    blockSequence1[i].y -= (blockSequence1[i].height+1);
+                    blockSequence1[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY-1,'up');
+                    blockSequence1[i].y -= blockSequence1[i].height;
                 }
                 if (sequence1[i] == -1) {
-                    blockSequence1[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY,'down');
+                    blockSequence1[i] = game.add.sprite(game.world.width+player.width*i, game.world.centerY+1,'down');
                 }
             }
         }
