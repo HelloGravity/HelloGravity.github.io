@@ -10,26 +10,34 @@
 	<body>
 	<a href="/">Click Here To go to the main menu</a>
 	<script type="text/javascript">
-	var game, screen = undefined;
+	var game, screen;
 
 	window.onload = function() {
-		game = new Phaser.Game(800, 600, Phaser.AUTO, '', { update : update , preload : preload});
+		game = new Phaser.Game(800, 600, Phaser.AUTO, '', { update : update , preload : preload, create : create});
+		
 		function preload() {
 			game.load.image('tomars-spaceship', 'toMars/spaceship.png');
+			game.load.image('tomars-potato1', 'toMars/potato1.png');
+			game.load.image('tomars-potato2', 'toMars/potato2.png');
+			game.load.image('tomars-potato3', 'toMars/potato3.png');
+			game.load.image('tomars-potato4', 'toMars/potato4.png');
+			game.physics.startSystem(Phaser.Physics.ARCADE);
+		}
+		function create() {
+			screen = new toMars(game);
+			screen.init();	
 		}
 		function update() {
-			if(screen == undefined) {
-				screen = new toMars(game);
-				screen.init();
+			if(screen) {
+				screen.update();
+				var nextScreen = screen.nextScreen();
+				if(nextScreen) {
+					screen.cleanup();
+					screen = nextScreen;
+					screen.init();
+				}
 			}
-			screen.update();
-			var nextScreen = screen.nextScreen();
-			if(nextScreen) {
-				screen.cleanup();
-				screen = nextScreen;
-				screen.init();
-			}
-
+			
 		}
 
 	};
