@@ -22,10 +22,12 @@
 			game.load.image('tomars-potato2', 'toMars/potato2.png');
 			game.load.image('tomars-potato3', 'toMars/potato3.png');
 			game.load.image('tomars-potato4', 'toMars/potato4.png');
+//			game.load.atlasJSONHash('launchanim', 'launchanim/launchanim.png', 'launchanim/launchanim.json');
+
 			game.physics.startSystem(Phaser.Physics.ARCADE);
 		}
 		function create() {
-			screen = new toMars(game);
+			screen = new launchanim(game);//new toMars(game);
 			screen.init();	
 		}
 		function update() {
