@@ -7,6 +7,7 @@
 		<script src="../phaser.min.js"></script>
 		<script src="../lodash.min.js"></script>
 		<script src="toMars/toMars.js"></script>
+		<script src="launchanim/launchanim.js"></script>
 	</head>
 	<body>
 	<a href="/">Click Here To go to the main menu</a>
@@ -22,11 +23,13 @@
 			game.load.image('tomars-potato2', 'toMars/potato2.png');
 			game.load.image('tomars-potato3', 'toMars/potato3.png');
 			game.load.image('tomars-potato4', 'toMars/potato4.png');
-//			game.load.atlasJSONHash('launchanim', 'launchanim/launchanim.png', 'launchanim/launchanim.json');
+			game.load.atlasJSONHash('launchanim0', 'launchanim/launchanim0.png', 'launchanim/launchanim0.json');
+			game.load.atlasJSONHash('launchanim1', 'launchanim/launchanim1.png', 'launchanim/launchanim1.json');
 
 			game.physics.startSystem(Phaser.Physics.ARCADE);
 		}
 		function create() {
+			console.log('boo')
 			screen = new launchanim(game);//new toMars(game);
 			screen.init();	
 		}
