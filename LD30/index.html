@@ -5,27 +5,29 @@
 		<title>hello phaser!</title>
 		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
 		<script src="../phaser.min.js"></script>
+		<script src="toMars/toMars.js"></script>
 	</head>
 	<body>
 	<a href="/">Click Here To go to the main menu</a>
 	<script type="text/javascript">
-	var game;
+	var game, screen = undefined;
 
 	window.onload = function() {
-		game = new Phaser.Game(800, 600, Phaser.AUTO, '', { update : update });
-		var level = null;
-
+		game = new Phaser.Game(800, 600, Phaser.AUTO, '', { update : update , preload : preload});
+		function preload() {
+			game.load.image('tomars-spaceship', 'toMars/spaceship.png');
+		}
 		function update() {
-			if(level==undefined) {
-				level = new toMars(game);
-				level.init();
+			if(screen == undefined) {
+				screen = new toMars(game);
+				screen.init();
 			}
-			level.update();
-			var nextLevel = level.nextLevel();
-			if(nextLevel) {
-				level.cleanup();
-				level = nextLevel;
-				level.init();
+			screen.update();
+			var nextScreen = screen.nextScreen();
+			if(nextScreen) {
+				screen.cleanup();
+				screen = nextScreen;
+				screen.init();
 			}
 
 		}
