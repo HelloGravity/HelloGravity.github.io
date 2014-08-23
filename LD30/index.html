@@ -23,14 +23,19 @@
 			game.load.image('tomars-potato2', 'toMars/potato2.png');
 			game.load.image('tomars-potato3', 'toMars/potato3.png');
 			game.load.image('tomars-potato4', 'toMars/potato4.png');
-			game.load.atlasJSONHash('launchanim0', 'launchanim/launchanim0.png', 'launchanim/launchanim0.json');
-			game.load.atlasJSONHash('launchanim1', 'launchanim/launchanim1.png', 'launchanim/launchanim1.json');
+			game.load.image('tomars-background', 'toMars/spacefield.png');
+			game.load.image('tomars-earth', 'toMars/earth.png');
+			game.load.image('tomars-boom', 'toMars/boom.png');
+			game.load.image('tomars-mars', 'toMars/mars.png');
+			//game.load.image('launchanim0', 'launchanim/launchanim0.png');
+			//game.load.atlasJSONHash('launchanim0', 'launchanim/launchanim0.png', 'launchanim/launchanim0.json');
+			//game.load.atlasJSONHash('launchanim1', 'launchanim/launchanim1.png', 'launchanim/launchanim1.json');
 
 			game.physics.startSystem(Phaser.Physics.ARCADE);
 		}
 		function create() {
 			console.log('boo')
-			screen = new launchanim(game);//new toMars(game);
+			screen = new toMars(game);//new launchanim(game);
 			screen.init();	
 		}
 		function update() {
