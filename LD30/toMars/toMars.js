@@ -6,20 +6,26 @@ function toMars(game) {
 	var player;
 	var potatos= [];
 	var earth;
+	var spacebar;
+	var boom;
+	var spaceBarPlan;
+
 	this.init = function() {
 		isActive = true;
-
 		background = game.add.sprite(0,0, 'tomars-background');
 		earth = game.add.sprite(0,game.height, 'tomars-earth');
 		earth.anchor.setTo(0,1);
 		mars = game.add.sprite(game.width + 300,game.height, 'tomars-mars');
 		mars.anchor.setTo(1,1);
 		player = game.add.sprite(200, 400, 'tomars-spaceship');
-		game.physics.arcade.enable(player);
-		player.body.collideWorldBounds = true;
 		player.anchor.setTo(0.5, 0.5);
 		player.rotation = Math.PI / 2;
-		player.scale.set(-0.4,0.4);
+
+		player.scale.set(0.4,0.4);
+		game.physics.p2.enable(player, false);	
+		player.body.clearShapes();
+		player.body.loadPolygon('tomars-physicsdata', 'spaceship', 0.4);
+		player.body.collideWorldBounds = true;
 		(function spawner() {
 			if(isActive) {
 				if(!isBoom)
@@ -27,10 +33,22 @@ function toMars(game) {
 				setTimeout(spawner, 300);
 			}
 		})();
+		player.body.onBeginContact.add(function(body, shapeA, shapeB, equation) {
+			if( _(potatos).where({ 'body': body }).length > 0) {
+				boom = game.add.sprite((player.position.x + potato.position.x)/2,(player.position.y + potato.position.y)/2, 'tomars-boom');
+				boom.anchor.setTo(0.5,0.5);
+				
+				isBoom = true;
+				spaceBarPlan = game.add.sprite(200,520, 'tomars-spacebar');
+			}
+		}, this);
+
 	}
 	this.cleanup = function() {
 		player.destroy();
 		earth.destroy();
+		boom.destroy();
+		background.destroy();
 		isActive = false;
 		for (var i = potatos.length - 1; i >= 0; i--) {
 			potatos[i].destroy();
@@ -38,23 +56,45 @@ function toMars(game) {
 	}
 	this.update = function() {
 		if(isBoom) {
+			_.forEach(potatos, function(potato) {
+				potato.body.velocity.x = 
+				potato.body.velocity.y = 
+				potato.body.force.x = 
+				potato.body.force.y = 
+				potato.body.angularVelocity = 
+				potato.body.angularForce = 0;
+			});
+			player.body.velocity.x = 
+			player.body.velocity.y = 
+			player.body.force.x = 
+			player.body.force.y = 
+			player.body.angularVelocity = 
+			player.body.angularForce = 0;
+			
 			if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
 				isPressedSpace = true;
 			return;
 		}
+		var velX = 0;
+		var velY = 0;
+		var velAng = 0;
 		if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
-			player.rotation -= 0.052;
+			velAng -= 3.3;
+
 		if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
-			player.rotation += 0.052;
+			velAng += 3.3;
+
 		if(game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
-			player.y -= 5*Math.cos(player.rotation);
-			player.x += 5*Math.sin(player.rotation);
-		}
+			velY -= 500*Math.cos(player.rotation);
+			velX += 500*Math.sin(player.rotation);
+		}	
 		if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
-			player.y += 5*Math.cos(player.rotation);
-			player.x -= 5*Math.sin(player.rotation);
+			velY += 500*Math.cos(player.rotation);
+			velX -= 500*Math.sin(player.rotation);
 		}
-		
+		player.body.velocity.x = velX;
+		player.body.velocity.y = velY;
+		player.body.angularVelocity = velAng;
 		var index = potatos.length;
 		while(index--) {
 			var potato = potatos[index];
@@ -67,9 +107,12 @@ function toMars(game) {
 		}
 
 		_.forEach(potatos, function(potato) {
-			game.physics.arcade.collide(potato, potatos);
+			potato.body.force.x = potato._data.forceX;
+			potato.body.force.y = potato._data.forceY;
+
+			/*
 			game.physics.arcade.collide(player, potato, function() {
-				var boom = game.add.sprite((player.position.x + potato.position.x)/2,(player.position.y + potato.position.y)/2, 'tomars-boom');
+				boom = game.add.sprite((player.position.x + potato.position.x)/2,(player.position.y + potato.position.y)/2, 'tomars-boom');
 				boom.anchor.setTo(0.5,0.5);
 				_.forEach(potatos, function(potato) {
 					potato.body.velocity.x = potato.body.velocity.y = 0;
@@ -77,29 +120,49 @@ function toMars(game) {
 					player.body.velocity.x = player.body.velocity.y = 0;
 				});
 				isBoom = true;
-			});
+				spaceBarPlan = game.add.sprite(200,520, 'tomars-spacebar');
+				
+			});*/
 		});
 
 		if(Phaser.Rectangle.intersects(earth.getBounds(),game.camera.bounds))
 			earth.x -= 0.1;
 		else if (mars.x > game.width)
 			mars.x -= 0.1;
+
+		if(player.body.x < 0)
+			player.body.x = 0;
+		if(player.body.y < 0)
+			player.body.y = 0;
+		if(player.body.y > game.height)
+			player.body.y = game.height;
+		if(player.body.x > game.width)
+			player.body.x = game.width;
 	}
 
 	this.spawnPotato = function() {
 		if(potatos.length > 7)
 			return;
+		var potatoId = game.rnd.between(1,4);
 		var inner = game.rnd.angle()/180*Math.PI, outer = game.rnd.angle()/180*Math.PI;
-		var beginningX = game.world.centerX + 1000*Math.cos(outer), beginningY = game.world.centerY + 1000*Math.sin(outer);
+		var beginningX = game.world.centerX + 600*Math.cos(outer), beginningY = game.world.centerY + 1000*Math.sin(outer);
 		var directionX = game.world.centerX + 300*Math.cos(inner), directionY = game.world.centerY + 300*Math.sin(inner);
-		var potato = game.add.sprite(beginningX, beginningY, 'tomars-potato'+game.rnd.between(1,4));
-		game.physics.arcade.enable(potato);
+		
+		var potato = game.add.sprite(beginningX, beginningY, 'tomars-potato'+potatoId);
 		potato.rotation = game.rnd.angle()/180*Math.PI;
 		potato.anchor.setTo(0.5, 0.5);
 		potato.scale.x = potato.scale.y = (game.rnd.frac()*0.7+0.3) * 0.4;
-		var velocityFactor = 0.04*(game.rnd.frac()*0.4+0.6);
-		var speed = Math.sqrt((directionX - beginningX)*velocityFactor * (directionX - beginningX)*velocityFactor + (directionY - beginningY)*velocityFactor*(directionY - beginningY)*velocityFactor);
-		game.physics.arcade.accelerateToXY(potato, directionX, directionY, speed, 3*speed, 3*speed); 
+		game.physics.p2.enable(potato, false);
+		potato.body.clearShapes();
+		potato.body.loadPolygon('tomars-physicsdata', 'potato' + potatoId, potato.scale.x);
+
+		
+		var speed = (game.rnd.frac()*0.4+0.6)*0.2*Math.sqrt((directionX - beginningX) * (directionX - beginningX) + (directionY - beginningY)*(directionY - beginningY));
+        var angle = Math.atan2(directionY - potato.y, directionX - potato.x);
+        potato._data = {
+        	forceY : Math.sin(angle) * speed,
+        	forceX : Math.cos(angle) * speed
+        };
 		potatos.push(potato);
 	}
 

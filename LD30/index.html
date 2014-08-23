@@ -7,7 +7,7 @@
 		<script src="../phaser.min.js"></script>
 		<script src="../lodash.min.js"></script>
 		<script src="toMars/toMars.js"></script>
-		<script src="launchanim/launchanim.js"></script>
+		<script src="launch/launchanim.js"></script>
 	</head>
 	<body>
 	<a href="/">Click Here To go to the main menu</a>
@@ -27,11 +27,14 @@
 			game.load.image('tomars-earth', 'toMars/earth.png');
 			game.load.image('tomars-boom', 'toMars/boom.png');
 			game.load.image('tomars-mars', 'toMars/mars.png');
+			game.load.image('tomars-spacebar', 'toMars/spacebarpress.png');
+			game.load.physics('tomars-physicsdata', 'toMars/sprites.json');
 			//game.load.image('launchanim0', 'launchanim/launchanim0.png');
 			//game.load.atlasJSONHash('launchanim0', 'launchanim/launchanim0.png', 'launchanim/launchanim0.json');
 			//game.load.atlasJSONHash('launchanim1', 'launchanim/launchanim1.png', 'launchanim/launchanim1.json');
 
 			game.physics.startSystem(Phaser.Physics.ARCADE);
+			game.physics.startSystem(Phaser.Physics.P2JS);
 		}
 		function create() {
 			console.log('boo')
@@ -47,10 +50,8 @@
 					screen = nextScreen;
 					screen.init();
 				}
-			}
-			
+			}		
 		}
-
 	};
 
 	</script>
