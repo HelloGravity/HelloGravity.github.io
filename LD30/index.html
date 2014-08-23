@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>hello phaser!</title>
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
+		<script src="../phaser.min.js"></script>
+	</head>
+	<body>
+	<a href="/">Click Here To go to the main menu</a>
+	<script type="text/javascript">
+	var game;
+
+	window.onload = function() {
+		game = new Phaser.Game(800, 600, Phaser.AUTO, '', { update : update });
+		var level = null;
+
+		function update() {
+			if(level==undefined) {
+				level = new toMars(game);
+				level.init();
+			}
+			level.update();
+			var nextLevel = level.nextLevel();
+			if(nextLevel) {
+				level.cleanup();
+				level = nextLevel;
+				level.init();
+			}
+
+		}
+
+	};
+
+	</script>
+	</body>
+</html>
