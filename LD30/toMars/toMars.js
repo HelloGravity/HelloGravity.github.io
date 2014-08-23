@@ -34,10 +34,10 @@ function toMars(game) {
 			}
 		})();
 		player.body.onBeginContact.add(function(body, shapeA, shapeB, equation) {
-			if( _(potatos).where({ 'body': body }).length > 0) {
+			var potato = _(potatos).where({ 'body': body }).first();
+			if(potato) {
 				boom = game.add.sprite((player.position.x + potato.position.x)/2,(player.position.y + potato.position.y)/2, 'tomars-boom');
-				boom.anchor.setTo(0.5,0.5);
-				
+				boom.anchor.setTo(0.5,0.5);			
 				isBoom = true;
 				spaceBarPlan = game.add.sprite(200,520, 'tomars-spacebar');
 			}
