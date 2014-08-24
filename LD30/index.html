@@ -7,6 +7,7 @@
 		<script src="../phaser.min.js"></script>
 		<script src="../lodash.min.js"></script>
 		<script src="toMars/toMars.js"></script>
+		<script src="landedMars/landedMars.js"></script>
 		<script src="endScreen/endScreen.js"></script>
 		<script src="saveEarth/saveEarth.js"></script>
 		<script src="menu/menu.js"></script>
@@ -61,18 +62,33 @@
 			game.load.physics('saveearth-physicsdata', 'saveEarth/sprites.json');
 			game.load.image('saveearth-instructions', 'saveEarth/startInstructions.png');
 
+
+			/*Landed Mars*/
+			game.load.image('landedmars-crash', 'landedMars/crash.png');
+			_(1).range(3+1).forEach(function(n){
+				game.load.image('landedmars-crashtext' + n, 'landedMars/crashtext'+n+'.png');
+			});
+			_(1).range(4+1).forEach(function(n){
+				game.load.image('landedmars-astrowalk' + n, 'landedMars/astrowalk'+n+'.png');
+			});
+			game.load.spritesheet('landedmars-astrowalk', 'landedMars/astrowalk.png', 66, 115);
+			game.load.image('landedmars-ground', 'landedMars/ground.png');
+
+
 			/*The end*/
 
 			game.load.image('endscreen-theend', 'endScreen/theend.png');
 
 
 			game.physics.startSystem(Phaser.Physics.P2JS);
+			game.physics.startSystem(Phaser.Physics.ARCADE);
 		}
 		function create() {
 		//	screen = new toMars(game);
 		//	screen = new launch(game);
-			screen = new menu(game);
+		//	screen = new menu(game);
 		//	screen = new saveEarth(game);
+			screen = new landedMars(game);
 			screen.init();	
 		}
 		function update() {
