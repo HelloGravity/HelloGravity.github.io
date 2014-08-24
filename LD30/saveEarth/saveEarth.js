@@ -1,17 +1,32 @@
 function saveEarth(game) {
+	var potatosRemaining = 47;
 	var isDead = false;
-	var player, earth;
+	var isStartedGame = false;
+	var player, earth;//
 	var lastShooting;
-	var bullets = [], potatos = [];
-	var potatos;
-	var boom;
+	var bullets = [], potatos = [];//
+	var potatos;//
+	var boom;//
 	var centerPoint;
+	var instructions;//
+	var text;//
 	var collisionGroups = {
 		earth: game.physics.p2.createCollisionGroup(),
 		player: game.physics.p2.createCollisionGroup(),
         bullets: game.physics.p2.createCollisionGroup(),
      	potatos: game.physics.p2.createCollisionGroup()
 	};
+
+	this.cleanup = function() {
+		if(player)player.destroy();
+		if(earth)earth.destroy();
+		_.forEach(potatos, function (potato) {potato.destroy();});
+		_.forEach(bullets, function (bullet) {bullet.destroy();});
+		if(boom)boom.destroy();
+		if(instructions)instructions.destroy();
+		if(text)text.destroy();
+	}
+
 	this.init = function() {
 		game.physics.p2.setImpactEvents(true);
 		earth = game.add.sprite(game.world.centerX, game.world.centerY,'saveearth-earthfight');
@@ -23,7 +38,6 @@ function saveEarth(game) {
 			boom = game.add.sprite((earthBody.x*0.4 + potato.x*0.6),(earthBody.y*0.4 + potato.y*0.6), 'tomars-boom');
 			boom.anchor.setTo(0.5,0.5);
 		}, this);
-
 
 		player = game.add.sprite(game.world.centerX, game.world.centerY,'saveearth-spaceship');
 		game.physics.p2.enable(player, false);
@@ -40,11 +54,11 @@ function saveEarth(game) {
 	    centerPoint = new Phaser.Point(game.world.centerX, game.world.centerY);
 	    (function spawner() {
 			if(isDead)return;
-			addPotato();
+			if(isStartedGame)addPotato();
 			setTimeout(spawner, 300);
 		})();
 
-				
+		instructions = game.add.sprite(0,0,'saveearth-instructions');
  	}
 
 	function addBullet() {
@@ -64,6 +78,7 @@ function saveEarth(game) {
 			_.remove(potatos, function (potato) {
 				if(potato.body == potatoBody) {
 					potato.destroy();
+					potatosRemaining--;
 					return true;
 				}
 				return false;
@@ -75,22 +90,23 @@ function saveEarth(game) {
 	}
 
 	function addPotato() {
-		if(potatos.length > 4)
+		if(potatos.length > 4 || potatosRemaining - potatos.length <= 0)
 			return;
 		var potatoId = game.rnd.between(1,4);
 		var angle = game.rnd.angle()/180*Math.PI;
 
         var potato = game.add.sprite(game.world.centerX + 600 * Math.cos(angle), game.world.centerY + 600 * Math.sin(angle), 'tomars-potato' + potatoId);
 
-		potato.scale.x = potato.scale.y = 0.2;
+		potato.scale.x = potato.scale.y = 0.2*(0.4 + 0.6*game.rnd.frac());
 		
    		potato.rotation = game.rnd.angle()/180*Math.PI;
 		game.physics.p2.enable(potato, false);
 		potato.body.clearShapes();
 		potato.body.loadPolygon('tomars-physicsdata', 'potato' + potatoId, potato.scale.x, potato.scale.y);
 
-		potato.body.velocity.x = -160 * Math.cos(angle);
-		potato.body.velocity.y = -160 * Math.sin(angle);
+		var randomVelFactor = 160 * (0.4 + 0.6*game.rnd.frac());
+		potato.body.velocity.x = -randomVelFactor * Math.cos(angle);
+		potato.body.velocity.y = -randomVelFactor * Math.sin(angle);
 
         potato.body.collideWorldBounds = false;
 		potato.body.setCollisionGroup(collisionGroups.potatos);
@@ -98,9 +114,27 @@ function saveEarth(game) {
 		potato.body.collides([collisionGroups.player,collisionGroups.bullets, collisionGroups.earth]);
 		potatos.push(potato);
 	}
-	this.cleanup = function() {
-	}
+	
 	this.update = function() {
+
+		if(!isStartedGame) {
+			if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+				if(instructions) {
+					instructions.destroy();
+					instructions = undefined;
+				}
+				isStartedGame = true;
+	    			var style = { font: "25px Arial", fill: "#ffffff", align: "Right" };
+
+   					text = game.add.text(game.world.centerX-300, 0, "", style);
+
+			}
+			return;
+		}
+		text.text = "Remaining Potatos :\n" + (potatosRemaining);
+		if(potatosRemaining == 0) {
+			//end
+		} 
 		_.remove(bullets,  function(bullet) {
 			if(Phaser.Point.distance(centerPoint, bullet) > 550) {
 				bullet.destroy();
@@ -129,6 +163,9 @@ function saveEarth(game) {
 	}
 
 	this.nextScreen = function() {
+		if(potatosRemaining == 0) {
+			return new endScreen(game);
+		}
 		return null;
 	}
 

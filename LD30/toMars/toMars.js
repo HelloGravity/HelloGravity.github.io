@@ -130,16 +130,6 @@ function toMars(game) {
 			return false;
 		});
 
-
-		/*for debug*/
-		/*
-		if(Phaser.Rectangle.intersects(earth.getBounds(),game.camera.bounds))
-			earth.x -= 2;
-		else if (mars.x > game.width)
-			mars.x -= 2;
-		*/
-
-		
 		if(Phaser.Rectangle.intersects(earth.getBounds(),game.camera.bounds))
 			earth.x -= 0.1;
 		else if (mars.x > game.width)
@@ -162,7 +152,7 @@ function toMars(game) {
 		if(isPressedSpace) {
 			return new toMars(game);
 		} else if (isScreenFinished) {
-			return new launch(game);
+			return new saveEarth(game);
 		}
 		return null;
 	}

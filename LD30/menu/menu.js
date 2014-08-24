@@ -37,13 +37,25 @@ function menu(game) {
 			if(!game.input.mousePointer.isDown) {
 				if(button1rect.contains(game.input.mousePointer.x, game.input.mousePointer.y)) {
         			goingToGame = true;
+        		} else {
+        			isMenu = true;
+        			isPressedGame = false;
+        			menu.bringToTop();
         		}
+
 			}
 		} else if(isPressedCredits) {
 			if(!game.input.mousePointer.isDown) {
-				isPressedCredits = false;
-    			isCredits = true;
-    			credits.bringToTop();
+				if(button2rect.contains(game.input.mousePointer.x, game.input.mousePointer.y)) {
+					isPressedCredits = false;
+    				isCredits = true;
+    				credits.bringToTop();
+				} else {
+					isMenu = true;
+        			isPressedCredits = false;
+        			menu.bringToTop();
+				}
+				
         	}
 		}  else if (isCredits) {
 			if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
