@@ -195,7 +195,6 @@ function toMars(game) {
 		var direction = new Phaser.Point(game.world.centerX + 300*Math.cos(inner), game.world.centerY + 300*Math.sin(inner));
 		
 		var potato = game.add.sprite(beginning.x, beginning.y, 'tomars-potato'+potatoId);
-		potato.anchor.setTo(0.5, 0.5);
 		potato.rotation = game.rnd.angle()/180*Math.PI;
 		potato.scale.x = potato.scale.y = (game.rnd.frac()*0.7+0.3) * 0.4;
 		game.physics.p2.enable(potato, false);
@@ -220,5 +219,4 @@ function toMars(game) {
 		item.body.angularVelocity = 
 		item.body.angularForce = 0;
 	}
-
 }
