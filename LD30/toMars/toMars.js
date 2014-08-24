@@ -132,18 +132,19 @@ function toMars(game) {
 
 
 		/*for debug*/
+		/*
 		if(Phaser.Rectangle.intersects(earth.getBounds(),game.camera.bounds))
 			earth.x -= 2;
 		else if (mars.x > game.width)
 			mars.x -= 2;
+		*/
 
-
-		/*
+		
 		if(Phaser.Rectangle.intersects(earth.getBounds(),game.camera.bounds))
 			earth.x -= 0.1;
 		else if (mars.x > game.width)
 			mars.x -= 0.1;
-		*/
+		
 
 		if(mars.x <= game.width) {
 			isGrandFinale = true;

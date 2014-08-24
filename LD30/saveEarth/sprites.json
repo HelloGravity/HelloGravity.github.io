@@ -1,0 +1,52 @@
+	{ 
+		
+		"spaceship": [
+			
+				{
+					"density": 2, "friction": 0, "bounce": 0, 
+					"filter": { "categoryBits": 1, "maskBits": 65535 },
+					"shape": [   23, 58  ,  13, 57  ,  11, 47  ,  11, 42  ,  29, 47  ,  34, 57  ]
+				}  ,
+				{
+					"density": 2, "friction": 0, "bounce": 0, 
+					"filter": { "categoryBits": 1, "maskBits": 65535 },
+					"shape": [   14, 65  ,  13, 57  ,  23, 58  ,  23, 67  ,  18, 75  ]
+				}  ,
+				{
+					"density": 2, "friction": 0, "bounce": 0, 
+					"filter": { "categoryBits": 1, "maskBits": 65535 },
+					"shape": [   36, 16  ,  36, 23  ,  32, 25  ,  9, 32  ,  11, 17  ,  20, 0  ]
+				}  ,
+				{
+					"density": 2, "friction": 0, "bounce": 0, 
+					"filter": { "categoryBits": 1, "maskBits": 65535 },
+					"shape": [   11, 47  ,  13, 57  ,  7, 56  ]
+				}  ,
+				{
+					"density": 2, "friction": 0, "bounce": 0, 
+					"filter": { "categoryBits": 1, "maskBits": 65535 },
+					"shape": [   0, 52  ,  0, 41  ,  5, 46  ,  4, 53  ]
+				}  ,
+				{
+					"density": 2, "friction": 0, "bounce": 0, 
+					"filter": { "categoryBits": 1, "maskBits": 65535 },
+					"shape": [   0, 41  ,  9, 32  ,  11, 42  ,  5, 46  ]
+				}  ,
+				{
+					"density": 2, "friction": 0, "bounce": 0, 
+					"filter": { "categoryBits": 1, "maskBits": 65535 },
+					"shape": [   36, 46  ,  38, 37  ,  41, 43  ,  41, 52  ,  38, 54  ]
+				}  ,
+				{
+					"density": 2, "friction": 0, "bounce": 0, 
+					"filter": { "categoryBits": 1, "maskBits": 65535 },
+					"shape": [   30, 43  ,  32, 33  ,  38, 37  ,  36, 46  ]
+				}  ,
+				{
+					"density": 2, "friction": 0, "bounce": 0, 
+					"filter": { "categoryBits": 1, "maskBits": 65535 },
+					"shape": [   9, 32  ,  32, 25  ,  32, 33  ,  30, 43  ,  29, 47  ,  11, 42  ]
+				}  
+		]
+		
+	}

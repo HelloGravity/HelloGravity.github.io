@@ -7,6 +7,8 @@
 		<script src="../phaser.min.js"></script>
 		<script src="../lodash.min.js"></script>
 		<script src="toMars/toMars.js"></script>
+		<script src="saveEarth/saveEarth.js"></script>
+		<script src="menu/menu.js"></script>
 		<script src="launch/launch.js"></script>
 	</head>
 	<body>
@@ -44,11 +46,26 @@
 			game.load.image('launch-spaceship', 'launch/spaceship.png');
 			game.load.image('launch-potato', 'launch/potato.png');
 			
+			/*Menu*/
+			game.load.image('menu-menu', 'menu/menu.png');
+			game.load.image('menu-creditpressed', 'menu/creditspressed.png');
+			game.load.image('menu-gamepressed', 'menu/gamepressed.png');
+			game.load.image('menu-credits', 'menu/credits.png');
+
+
+			/*Save Earth*/
+			game.load.image('saveearth-earthfight', 'saveEarth/earthfight.png');
+			game.load.image('saveearth-spaceship', 'saveEarth/spaceship.png');
+			game.load.physics('saveearth-physicsdata', 'saveEarth/sprites.json');
+
+
 			game.physics.startSystem(Phaser.Physics.P2JS);
 		}
 		function create() {
 		//	screen = new toMars(game);
-			screen = new launch(game);
+		//	screen = new launch(game);
+		//	screen = new menu(game);
+			screen = new saveEarth(game);
 			screen.init();	
 		}
 		function update() {
