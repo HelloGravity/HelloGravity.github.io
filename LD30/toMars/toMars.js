@@ -30,16 +30,20 @@ function toMars(game) {
 		player.body.onBeginContact.add(function(body, shapeA, shapeB, equation) {
 			var potato = _(potatos).where({ 'body': body }).first();
 			if(potato) {
+				if(boom)boom.destroy();
 				boom = game.add.sprite((player.position.x + potato.position.x)/2,(player.position.y + potato.position.y)/2, 'tomars-boom');
 				boom.anchor.setTo(0.5,0.5);			
 				isBoom = true;
+				if(spaceBarPlan)spaceBarPlan.destroy();
 				spaceBarPlan = game.add.sprite(200,520, 'tomars-spacebar');
 			}
 			else if (body == grandPotato.body) {
 				isGrandBoom = true;
+				if(boom)boom.destroy();
 				boom = game.add.sprite(player.position.x*0.8 + grandPotato.position.x*0.2,player.position.y*0.8 + grandPotato.position.y*0.2, 'tomars-boom');
 				boom.scale.x = boom.scale.y = 2;
 				boom.anchor.setTo(0.5,0.5);
+				if(pressToContinue)pressToContinue.destroy();
 				pressToContinue = game.add.sprite(0,0, 'tomars-tocontinue');
 			}
 		}, this);
@@ -56,13 +60,14 @@ function toMars(game) {
 			spaceBarPlan.destroy();
 		if(boom)
 			boom.destroy();
-
 		if(instructions)
 			instructions.destroy();
 		if(grandPotato)
 			grandPotato.destroy();
 		if(pressToContinue)
 			pressToContinue.destroy();
+		if(mars)
+			mars.destroy();
 		isActive = false;
 	}
 
@@ -131,9 +136,9 @@ function toMars(game) {
 		});
 
 		if(Phaser.Rectangle.intersects(earth.getBounds(),game.camera.bounds))
-			earth.x -= 0.1;
+			earth.x -= 0.44;
 		else if (mars.x > game.width)
-			mars.x -= 0.1;
+			mars.x -= 0.44;
 		
 
 		if(mars.x <= game.width) {
@@ -152,7 +157,7 @@ function toMars(game) {
 		if(isPressedSpace) {
 			return new toMars(game);
 		} else if (isScreenFinished) {
-			return new saveEarth(game);
+			return new landedMars(game);
 		}
 		return null;
 	}

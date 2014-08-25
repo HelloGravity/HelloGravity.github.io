@@ -7,11 +7,11 @@ function platformer(game) {
 	this.init = function() {
 		game.stage.backgroundColor = '#4E2121';
 
-		game.item = item = game.add.sprite(933,98, 'platformer-item');
+		item = game.add.sprite(933,98, 'platformer-item');
     	item.scale.x = item.scale.y = 0.1;
 
 
-		game.player = player = game.add.sprite(1090,985, 'landedmars-astrowalk');
+		player = game.add.sprite(1090,985, 'landedmars-astrowalk');
 		game.physics.enable(player, Phaser.Physics.ARCADE);
 		player.animations.add('right', [0, 1, 2, 3], 10, true);
     	player.animations.add('left', [4, 5, 6, 7], 10, true);
@@ -21,7 +21,7 @@ function platformer(game) {
 
 		game.world.setBounds(0, 0, 1195, 1100);
 
-  		game.plats = platforms = game.add.group();
+  		platforms = game.add.group();
 		platforms.enableBody = true;
    	 	platforms.physicsBodyType = Phaser.Physics.ARCADE;
   
@@ -88,7 +88,7 @@ function platformer(game) {
             	facing = 'idle';
        		}
    		}
-    	if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && (player.body.touching.down || game.player.body.onFloor())&& game.time.now > jumpTimer) {
+    	if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && (player.body.touching.down || player.body.onFloor())&& game.time.now > jumpTimer) {
         	player.body.velocity.y = -640;
         	jumpTimer = game.time.now + 750;
     	}

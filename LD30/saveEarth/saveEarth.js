@@ -37,8 +37,10 @@ function saveEarth(game, noInstructions) {
 		earth.body.setCollisionGroup(collisionGroups.earth);
 		earth.body.collides(collisionGroups.potatos, function(earthBody,potato) {
 			isDead = true;
+			if(boom)boom.destroy();
 			boom = game.add.sprite((earthBody.x*0.4 + potato.x*0.6),(earthBody.y*0.4 + potato.y*0.6), 'tomars-boom');
 			boom.anchor.setTo(0.5,0.5);
+			if(spaceBarPlan)spaceBarPlan.destroy();
 			spaceBarPlan = game.add.sprite(200,520, 'tomars-spacebar');
 		}, this);
 
@@ -49,8 +51,10 @@ function saveEarth(game, noInstructions) {
 		player.body.setCollisionGroup(collisionGroups.player);
 		player.body.collides(collisionGroups.potatos, function(playerBody,potato) {
 			isDead = true;		
+			if(boom)boom.destroy();
 			boom = game.add.sprite((player.position.x*0.4 + potato.x*0.6),(player.position.y*0.4 + potato.y*0.6), 'tomars-boom');
 			boom.anchor.setTo(0.5,0.5);
+			if(spaceBarPlan)spaceBarPlan.destroy();
 			spaceBarPlan = game.add.sprite(200,520, 'tomars-spacebar');
 		}, this);
 		lastShooting = game.time.now;
@@ -100,14 +104,14 @@ function saveEarth(game, noInstructions) {
 
         var potato = game.add.sprite(game.world.centerX + 600 * Math.cos(angle), game.world.centerY + 600 * Math.sin(angle), 'tomars-potato' + potatoId);
 
-		potato.scale.x = potato.scale.y = 0.2*(0.4 + 0.6*game.rnd.frac());
+		potato.scale.x = potato.scale.y = 0.2 + 0.27*game.rnd.frac();
 		
    		potato.rotation = game.rnd.angle()/180*Math.PI;
 		game.physics.p2.enable(potato, false);
 		potato.body.clearShapes();
 		potato.body.loadPolygon('tomars-physicsdata', 'potato' + potatoId, potato.scale.x, potato.scale.y);
 
-		var randomVelFactor = 160 * (0.4 + 0.6*game.rnd.frac());
+		var randomVelFactor = 130 * (0.4 + 0.6*game.rnd.frac());
 		potato.body.velocity.x = -randomVelFactor * Math.cos(angle);
 		potato.body.velocity.y = -randomVelFactor * Math.sin(angle);
 

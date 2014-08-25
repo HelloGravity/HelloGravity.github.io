@@ -32,6 +32,9 @@ function alienCity(game) {
     	game.physics.arcade.gravity.y = 1500;
 	}
 	this.cleanup = function() {
+		game.camera.bounds.setTo(0, 0, 800, 600);
+		game.physics.arcade.gravity.y = 0;
+		game.camera.unfollow();
 		if(player)player.destroy();
 		if(text1)text1.destroy();
 		if(text2)text2.destroy();
@@ -39,8 +42,8 @@ function alienCity(game) {
 		if(background)background.destroy();
 		if(spacebar)spacebar.destroy();
 		if(ground)ground.destroy();
-		game.camera.bounds.setTo(0, 0, 800, 600);
 	}
+
 	this.update = function() {
 		game.physics.arcade.collide(player, ground);
 		 player.body.velocity.x = 0;
