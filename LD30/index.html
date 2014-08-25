@@ -10,6 +10,7 @@
 		<script src="landedMars/landedMars.js"></script>
 		<script src="endScreen/endScreen.js"></script>
 		<script src="saveEarth/saveEarth.js"></script>
+		<script src="alienCity/alienCity.js"></script>
 		<script src="menu/menu.js"></script>
 		<script src="launch/launch.js"></script>
 	</head>
@@ -24,9 +25,8 @@
 		function preload() {
 			/*To Mars*/
 			game.load.image('tomars-spaceship', 'toMars/spaceship.png');
-			_(1).range(4+1).forEach(function(n){
+			for(var n = 1; n <= 4; n++)
 				game.load.image('tomars-potato'+n, 'toMars/potato' + n+'.png');
-			});
 			game.load.image('tomars-background', 'toMars/spacefield.png');
 			game.load.image('tomars-earth', 'toMars/earth.png');
 			game.load.image('tomars-boom', 'toMars/boom.png');
@@ -38,12 +38,11 @@
 			game.load.physics('tomars-physicsdata', 'toMars/sprites.json');
 
 			/*Launch*/
-			_(1).range(6+1).forEach(function(n){
+			for(var n = 1; n <= 6; n++)
 				game.load.image('launch-launch'+n, 'launch/launch' + n+'.png');
-			});
-			_(1).range(5+1).forEach(function(n){
+
+			for(var n = 1; n <= 5; n++)
 				game.load.image('launch-'+n, 'launch/' + n+'.png');
-			});
 			game.load.image('launch-space', 'launch/press_space.png');
 			game.load.image('launch-spaceship', 'launch/spaceship.png');
 			game.load.image('launch-potato', 'launch/potato.png');
@@ -65,18 +64,20 @@
 
 			/*Landed Mars*/
 			game.load.image('landedmars-crash', 'landedMars/crash.png');
-			_(1).range(3+1).forEach(function(n){
+			for(var n = 1; n <= 3; n++)
 				game.load.image('landedmars-crashtext' + n, 'landedMars/crashtext'+n+'.png');
-			});
-			_(1).range(4+1).forEach(function(n){
+			for(var n = 1; n <= 4; n++)
 				game.load.image('landedmars-astrowalk' + n, 'landedMars/astrowalk'+n+'.png');
-			});
 			game.load.spritesheet('landedmars-astrowalk', 'landedMars/astrowalk.png', 66, 115);
 			game.load.image('landedmars-ground', 'landedMars/ground.png');
 
+			/*Alien City*/
+			for(var n = 1; n <= 3; n++)
+				game.load.image('aliencity-alientext' + n, 'alienCity/alientext'+n+'.png');
+			game.load.image('aliencity-ground', 'alienCity/ground.png');
+			game.load.image('aliencity-marscity', 'alienCity/marscity.png');
 
 			/*The end*/
-
 			game.load.image('endscreen-theend', 'endScreen/theend.png');
 
 
@@ -89,6 +90,7 @@
 		//	screen = new menu(game);
 		//	screen = new saveEarth(game);
 			screen = new landedMars(game);
+		//	screen = new alienCity(game);
 			screen.init();	
 		}
 		function update() {

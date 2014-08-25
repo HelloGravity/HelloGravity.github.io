@@ -118,7 +118,7 @@ function landedMars(game) {
 
 	this.nextScreen = function() {
 		if(isEnded)
-			return new menu(game);
+			return new alienCity(game);
 		return null;
 	}
 	
