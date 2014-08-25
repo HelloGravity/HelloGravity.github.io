@@ -17,12 +17,36 @@
 		<script src="launch/launch.js"></script>
 	</head>
 	<body>
-	<a href="/">Click Here To go to the main menu</a>
+	<div id='game'></div>
+	<h1 id="loading">Loading<span id="wait">.</span></h1>
 	<script type="text/javascript">
 	var game, screen;
 
 	window.onload = function() {
-		game = new Phaser.Game(800, 600, Phaser.AUTO, '', { update : update , preload : preload, create : create});
+		var isDoneLoading = false;
+	    var dotsGoingUp = true;
+	    /*http://stackoverflow.com/questions/4639716/dot-dotdot-dotdotdot-as-loading-in-js*/
+	    var dots = window.setInterval( function() {
+	    	if(isDoneLoading) {
+				var lodaing = document.getElementById('loading');
+				lodaing.parentNode.removeChild(lodaing);
+				clearInterval(dots);
+	    		return;
+	    	}
+	        var wait = document.getElementById("wait");
+	        if ( window.dotsGoingUp ) 
+	            wait.innerHTML += ".";
+	        else {
+	            wait.innerHTML = wait.innerHTML.substring(1, wait.innerHTML.length);
+	            if ( wait.innerHTML === "")
+	                window.dotsGoingUp = true;
+	        }
+	        if ( wait.innerHTML.length > 9 )
+	            window.dotsGoingUp = false;
+	        }, 100);
+
+
+		game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { update : update , preload : preload, create : create});
 		
 		function preload() {
 			/*To Mars*/
@@ -99,6 +123,7 @@
 			game.physics.startSystem(Phaser.Physics.ARCADE);
 		}
 		function create() {
+			isDoneLoading = true;
 			screen = new menu(game);
 			screen.init();	
 		}
