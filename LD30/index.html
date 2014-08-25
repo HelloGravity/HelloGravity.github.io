@@ -19,10 +19,25 @@
 	<body>
 	<div id='game'></div>
 	<h1 id="loading">Loading<span id="wait">.</span></h1>
+	<a id='music' href='' style="display:none">Pause/Resume Music</a>
 	<script type="text/javascript">
 	var game, screen;
 
+
+
+
 	window.onload = function() {
+		var isMusic = true;
+		var music;
+		document.getElementById('music').addEventListener('click', function(e){ 
+			isMusic = !isMusic;
+			if(isMusic)
+				music.resume();
+			else 
+				music.pause();
+	        e.preventDefault();
+  		});
+
 		var isDoneLoading = false;
 	    var dotsGoingUp = true;
 	    /*http://stackoverflow.com/questions/4639716/dot-dotdot-dotdotdot-as-loading-in-js*/
@@ -119,14 +134,23 @@
 			game.load.image('endscreen-theend', 'endScreen/theend.png');
 
 
+
+			game.load.audio('audio', ['HeroicAge.mp3', 'HeroicAge.ogg']);
+
 			game.physics.startSystem(Phaser.Physics.P2JS);
 			game.physics.startSystem(Phaser.Physics.ARCADE);
 		}
+
 		function create() {
 			isDoneLoading = true;
 			screen = new menu(game);
-			screen.init();	
+			screen.init();
+
+			music = game.add.audio('audio', 1, true);
+    		music.play();	
+    		document.getElementById('music').style.display="";
 		}
+		var paused = false;
 		function update() {
 			if(screen) {
 				screen.update();
