@@ -1,4 +1,4 @@
-function saveEarth(game) {
+function saveEarth(game, noInstructions) {
 	var potatosRemaining = 47;
 	var isDead = false;
 	var isStartedGame = false;
@@ -10,6 +10,7 @@ function saveEarth(game) {
 	var centerPoint;
 	var instructions;//
 	var text;//
+	var spaceBarPlan;//
 	var collisionGroups = {
 		earth: game.physics.p2.createCollisionGroup(),
 		player: game.physics.p2.createCollisionGroup(),
@@ -25,6 +26,7 @@ function saveEarth(game) {
 		if(boom)boom.destroy();
 		if(instructions)instructions.destroy();
 		if(text)text.destroy();
+		if(spaceBarPlan)spaceBarPlan.destroy();
 	}
 
 	this.init = function() {
@@ -37,6 +39,7 @@ function saveEarth(game) {
 			isDead = true;
 			boom = game.add.sprite((earthBody.x*0.4 + potato.x*0.6),(earthBody.y*0.4 + potato.y*0.6), 'tomars-boom');
 			boom.anchor.setTo(0.5,0.5);
+			spaceBarPlan = game.add.sprite(200,520, 'tomars-spacebar');
 		}, this);
 
 		player = game.add.sprite(game.world.centerX, game.world.centerY,'saveearth-spaceship');
@@ -48,7 +51,7 @@ function saveEarth(game) {
 			isDead = true;		
 			boom = game.add.sprite((player.position.x*0.4 + potato.x*0.6),(player.position.y*0.4 + potato.y*0.6), 'tomars-boom');
 			boom.anchor.setTo(0.5,0.5);
-				
+			spaceBarPlan = game.add.sprite(200,520, 'tomars-spacebar');
 		}, this);
 		lastShooting = game.time.now;
 	    centerPoint = new Phaser.Point(game.world.centerX, game.world.centerY);
@@ -57,8 +60,8 @@ function saveEarth(game) {
 			if(isStartedGame)addPotato();
 			setTimeout(spawner, 300);
 		})();
-
-		instructions = game.add.sprite(0,0,'saveearth-instructions');
+		if(!noInstructions)
+			instructions = game.add.sprite(0,0,'saveearth-instructions');
  	}
 
 	function addBullet() {
@@ -118,23 +121,19 @@ function saveEarth(game) {
 	this.update = function() {
 
 		if(!isStartedGame) {
-			if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+			if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) || noInstructions) {
 				if(instructions) {
 					instructions.destroy();
 					instructions = undefined;
 				}
 				isStartedGame = true;
-	    			var style = { font: "25px Arial", fill: "#ffffff", align: "Right" };
-
-   					text = game.add.text(game.world.centerX-300, 0, "", style);
-
+    			var style = { font: "25px Arial", fill: "#ffffff", align: "Right" };
+				text = game.add.text(game.world.centerX-300, 0, "", style);
 			}
 			return;
 		}
 		text.text = "Remaining Potatos :\n" + (potatosRemaining);
-		if(potatosRemaining == 0) {
-			//end
-		} 
+
 		_.remove(bullets,  function(bullet) {
 			if(Phaser.Point.distance(centerPoint, bullet) > 550) {
 				bullet.destroy();
@@ -165,6 +164,8 @@ function saveEarth(game) {
 	this.nextScreen = function() {
 		if(potatosRemaining == 0) {
 			return new endScreen(game);
+		} else if (isDead && game.input.keyboard.justReleased(Phaser.Keyboard.SPACEBAR)) {
+			return new saveEarth(game, false);
 		}
 		return null;
 	}

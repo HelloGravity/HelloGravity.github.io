@@ -1,18 +1,19 @@
-function alienCity(game) {
-	var background, player, ground;
-	var spacebar, text1,text2, text3;
-	var isTaklking = false, isLeaving = false, isEnded = false;
+function alienCityReturns(game) {
+	var background, player, ground, missionTitle;
+	var isTaklking = false, isLeaving = false, isEnded = false, isPressedSpace = false;
 	var facing = '';
 	var jumpTimer = 0;
 	var isGravity = false;
 	var isEnded = false;
-
+	var spacebar, text1,text2, text3;
 	var last = false;
 	var step = 0;
+	var time = game.time.now;
 	this.init = function() {
-		text1 = game.add.sprite(789,158, 'aliencity-alientext1');
-		text2 = game.add.sprite(791,120, 'aliencity-alientext2');
-		text3 = game.add.sprite(782,118, 'aliencity-alientext3');
+		missionTitle = game.add.sprite(0,0,'aliencityreturns-missiontitle')
+		text1 = game.add.sprite(921,157, 'aliencityreturns-alienbacktext1');
+		text2 = game.add.sprite(791,120, 'aliencityreturns-alienbacktext2');
+		text3 = game.add.sprite(852,158, 'aliencityreturns-alienbacktext3');
 		spacebar = game.add.sprite(743,0, 'tomars-tocontinue');
 		background = game.add.sprite(0,0, 'aliencity-marscity');
 		
@@ -39,6 +40,7 @@ function alienCity(game) {
 		if(background)background.destroy();
 		if(spacebar)spacebar.destroy();
 		if(ground)ground.destroy();
+		if(missionTitle)missionTitle.destroy();
 		game.camera.bounds.setTo(0, 0, 800, 600);
 	}
 	this.update = function() {
@@ -122,13 +124,25 @@ function alienCity(game) {
 	    	player.animations.stop();
 	    	player.frame = 0;
     	}
-    	if(player.x < 285 && isLeaving)
+    	if(player.x < 285 && isLeaving && !isEnded) {
     		isEnded = true;
+    		last = false;
+    		missionTitle.bringToTop();
+    		time = game.time.now;
+    	}
+    	if(isEnded) {
+
+    		var now = game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR);
+    		if(game.input.keyboard.justReleased(Phaser.Keyboard.SPACEBAR) && game.time.now - time > 500) {
+    			isPressedSpace = true;
+    		}
+    		last = now;
+    	}
 	}
 
 	this.nextScreen = function() {
-		if(isEnded)
-			return new platformer(game);
+		if(isPressedSpace)
+			return new saveEarth(game, true);
 		return null;
 	}
 	

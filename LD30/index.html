@@ -11,6 +11,8 @@
 		<script src="endScreen/endScreen.js"></script>
 		<script src="saveEarth/saveEarth.js"></script>
 		<script src="alienCity/alienCity.js"></script>
+		<script src="alienCityReturns/alienCityReturns.js"></script>
+		<script src="platformer/platformer.js"></script>
 		<script src="menu/menu.js"></script>
 		<script src="launch/launch.js"></script>
 	</head>
@@ -77,6 +79,18 @@
 			game.load.image('aliencity-ground', 'alienCity/ground.png');
 			game.load.image('aliencity-marscity', 'alienCity/marscity.png');
 
+			/*Alien City Returns*/
+			for(var n = 1; n <= 3; n++)
+				game.load.image('aliencityreturns-alienbacktext' + n, 'alienCityReturns/alienbacktext'+n+'.png');
+			game.load.image('aliencityreturns-missiontitle', 'alienCityReturns/MissionTitle.png');
+
+			/*Platformer*/
+			for(var n = 1; n <= 13; n++)
+				game.load.image('platformer-' + n, 'platformer/'+n+'.png');
+			game.load.image('platformer-item', 'platformer/item.png');
+			game.load.image('platformer-background', 'platformer/item.png');
+			game.load.image('platformer-instructions', 'platformer/goBackBanner.png');
+
 			/*The end*/
 			game.load.image('endscreen-theend', 'endScreen/theend.png');
 
@@ -85,12 +99,7 @@
 			game.physics.startSystem(Phaser.Physics.ARCADE);
 		}
 		function create() {
-		//	screen = new toMars(game);
-		//	screen = new launch(game);
-		//	screen = new menu(game);
-		//	screen = new saveEarth(game);
-			screen = new landedMars(game);
-		//	screen = new alienCity(game);
+			screen = new menu(game);
 			screen.init();	
 		}
 		function update() {

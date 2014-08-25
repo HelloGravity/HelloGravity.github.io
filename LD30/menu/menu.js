@@ -67,7 +67,7 @@ function menu(game) {
 	}
 	this.nextScreen = function() {
 		if(goingToGame)
-			return new toMars(game);
+			return new launch(game);
 		return null;
 	}
 }

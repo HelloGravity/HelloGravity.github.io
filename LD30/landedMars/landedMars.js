@@ -1,11 +1,12 @@
 function landedMars(game) {
 	var background, player, ground;
-
+	var spacebar, text1,text2, text3;
+	
 	var facing = 'right';
 	var jumpTimer = 0;
 	var isGravity = false;
 	var isEnded = false;
-	var spacebar, text1,text2, text3;
+
 	var last = false;
 	var step = 0;
 	this.init = function() {
@@ -27,7 +28,13 @@ function landedMars(game) {
     	player.animations.add('left', [4, 5, 6, 7], 10, true);
 	}
 	this.cleanup = function() {
-	
+		if(player)player.destroy();
+		if(text1)text1.destroy();
+		if(text2)text2.destroy();
+		if(text3)text3.destroy();
+		if(background)background.destroy();
+		if(spacebar)spacebar.destroy();
+		if(ground)ground.destroy();
 	}
 	this.update = function() {
 		if(!isGravity) {
