@@ -21,7 +21,7 @@
 	<h1 id="loading">Loading<span id="wait">.</span></h1>
 	<a id='music' href='' style="display:none">Pause/Resume Music</a>
 	<script type="text/javascript">
-	var game, screen;
+	var game, currentScreen;
 
 
 
@@ -143,8 +143,8 @@
 
 		function create() {
 			isDoneLoading = true;
-			screen = new menu(game);
-			screen.init();
+			currentScreen = new menu(game);
+			currentScreen.init();
 
 			music = game.add.audio('audio', 1, true);
     		music.play();	
@@ -152,13 +152,13 @@
 		}
 		var paused = false;
 		function update() {
-			if(screen) {
-				screen.update();
-				var nextScreen = screen.nextScreen();
+			if(currentScreen) {
+				currentScreen.update();
+				var nextScreen = currentScreen.nextScreen();
 				if(nextScreen) {
-					screen.cleanup();
-					screen = nextScreen;
-					screen.init();
+					currentScreen.cleanup();
+					currentScreen = nextScreen;
+					currentScreen.init();
 				}
 			}		
 		}
