@@ -5,7 +5,6 @@ function the_game(game) {
 		player = game.add.sprite(36,36, 'meow-the-cat');
 		player.animations.add('fly');
 		player.animations.play('fly');
-		game.physics.enable(ground, Phaser.Physics.ARCADE);
 	}
 	this.cleanup = function() {
 		if(player) player.destroy();
