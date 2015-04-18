@@ -42,7 +42,7 @@
 
 
 		game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { update : update , preload : preload, create : create});
-		
+
 		function preload() {
 			/*Menu*/
 			game.load.image('menu-menu', 'menu/menu.png');
@@ -50,19 +50,13 @@
 			game.load.image('menu-gamepressed', 'menu/gamepressed.png');
 			game.load.image('menu-credits', 'menu/credits.png');
 
-			/*Platformer*/
-			for(var n = 1; n <= 13; n++)
-				game.load.image('platformer-' + n, 'platformer/'+n+'.png');
-			game.load.image('platformer-item', 'platformer/item.png');
-			game.load.image('platformer-background', 'platformer/item.png');
-			game.load.image('platformer-instructions', 'platformer/goBackBanner.png');
+			/*The Game*/
+			game.load.spritesheet('meow-the-cat', 'the_game/meow_the_cat.png', 36, 36);
 
 			/*The end*/
 			game.load.image('endscreen-theend', 'endScreen/theend.png');
-
 			game.load.audio('audio', ['HeroicAge.mp3', 'HeroicAge.ogg']);
 
-			game.physics.startSystem(Phaser.Physics.P2JS);
 			game.physics.startSystem(Phaser.Physics.ARCADE);
 		}
 
@@ -75,7 +69,7 @@
 			music.play();	
 			document.getElementById('music').style.display = "";
 		}
-		var paused = false;
+		
 		function update() {
 			if(currentScreen) {
 				currentScreen.update();
