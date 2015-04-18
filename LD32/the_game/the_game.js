@@ -4,6 +4,7 @@ function the_game(game) {
 	this.init = function() {
 		player = game.add.sprite(36,36, 'meow-the-cat');
 		player.animations.add('fly');
+		player.animations.play('fly', 17, true);
 	}
 	this.cleanup = function() {
 		if(player) player.destroy();
