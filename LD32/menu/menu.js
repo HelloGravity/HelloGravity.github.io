@@ -67,7 +67,7 @@ function menu(game) {
 	}
 	this.nextScreen = function() {
 		if(goingToGame)
-			return new platformer(game);
+			return new the_game(game);
 		return null;
 	}
 }
