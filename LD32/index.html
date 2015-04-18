@@ -20,7 +20,7 @@
 	window.onload = function() {
 		var isMusic = true;
 		var music;
-		var nyan-music;
+		var nyanmusic;
 		document.getElementById('music').addEventListener('click', function(e){ 
 			isMusic = !isMusic;
 			if(isMusic)
@@ -83,7 +83,7 @@
 			currentScreen.init();
 
 			music = game.add.audio('audio', 1, true);
-			nyan-music = game.add.audio('nyan-audio', 1, false);
+			nyanmusic = game.add.audio('nyan-audio', 1, false);
 			music.play();	
 			document.getElementById('music').style.display = "";
 		}
