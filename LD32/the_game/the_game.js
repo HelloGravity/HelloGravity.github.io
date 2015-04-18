@@ -1,13 +1,21 @@
 function the_game(game) {
-	var BOOMERANG_RADIUS = 100;
+	/* CONSTS */
+	var BOOMERANG_RADIUS = 175;
+	var BOOMERANG_SPEED = 400;
+	var BOOMERANG_SPEED_BACK = 50;
 
+	/* GAME OBJECTS */
 	var player;
 	var ground;
 	var boomerang;
-	var boomerang_coordinate;
+	var aim;
+	var rainbows = [];
+
+	/* VARIABLES */
 	var last_velocity = 0;
 	var current_velocity = 0;
-	var rainbows = [];
+	var is_shooting = false; // returning is still counted shooting
+	var is_returning = false; 
 
 	function create_ground()
 	{
@@ -41,14 +49,20 @@ function the_game(game) {
 		}, this);
 	}
 	
-	function create_boomerang_coordinate()
+	function create_aim()
 	{
-
+		aim = game.add.sprite(0,0, 'aim');
+		aim.anchor.setTo(.5,.5);
 	}
 
 	function create_boomerang()
 	{
-		boomerang = game.add.sprite(72,72, 'meow-the-cat');
+		boomerang = game.add.sprite(28,28, 'boomerang');
+		boomerang.animations.add('spin');
+		boomerang.animations.play('spin', 13, true);
+		boomerang.anchor.setTo(.5,.5);
+		game.physics.enable(boomerang, Phaser.Physics.ARCADE);
+		boomerang.kill(); // do not show in the beginning
 	}
 
 	function clear_all_rainbows()
@@ -61,7 +75,6 @@ function the_game(game) {
 
 	function add_rainbow(x,y)
 	{
-		/* add rainbows */
 		var new_rainbow = game.add.sprite(1,7, 'rainbow');
 		game.physics.enable(new_rainbow, Phaser.Physics.ARCADE);
 		new_rainbow.x = x;
@@ -127,16 +140,80 @@ function the_game(game) {
 
 	function do_boomerang()
 	{
+
+		if(!is_shooting && game.input.mousePointer.justPressed())
+		{
+			boomerang.x = player.x;
+			boomerang.y = player.y;
+			is_shooting = true;
+			boomerang.revive();
+			
+			var difX = aim.x - boomerang.x;
+			var difY = aim.y - boomerang.y;
+			var difAbs = Math.sqrt(difX*difX+difY*difY);
+			boomerang.body.velocity.x = BOOMERANG_SPEED * difX/difAbs;
+			boomerang.body.velocity.y = BOOMERANG_SPEED * difY/difAbs;
+		}
+		if (is_shooting) 
+		{
+			if (!is_returning)
+			{
+				//boomerang.body.velocity.x *= 0.97;
+				//boomerang.body.velocity.y *= 0.97;
+				var difX = aim.x - boomerang.x;
+				var difY = aim.y - boomerang.y;
+				if (boomerang.body.velocity.x * difX < 0 || boomerang.body.velocity.y * difY < 0)
+				{
+					boomerang.body.velocity.set(0,0);
+					boomerang.x = aim.x;
+					boomerang.y = aim.y;
+					is_returning = true;
+				}
+
+			}
+			else
+			{
+				var old_speed = Math.sqrt(
+					boomerang.body.velocity.x * boomerang.body.velocity.x +
+					boomerang.body.velocity.y * boomerang.body.velocity.y);
+				var new_speed = (old_speed > 0) ? old_speed*1.02 : BOOMERANG_SPEED_BACK;
+				var difX = player.x - boomerang.x;
+				var difY = player.y - boomerang.y;
+				var difAbs = Math.sqrt(difX*difX+difY*difY);
+				boomerang.body.velocity.x = new_speed * difX/difAbs;
+				boomerang.body.velocity.y = new_speed * difY/difAbs;
+
+				if (difAbs < 5)
+				{
+					is_returning = false;
+					is_shooting = false;
+					boomerang.body.velocity.x = 0;
+					boomerang.body.velocity.y = 0;
+					boomerang.kill();
+				}
+			}
+		}
 		boomerang.bringToTop();
 	}
 
-	function do_boomerang_coordinate()
+	function do_aim()
 	{
-		var difX = game.input.x - player.x;
-		var difY = game.input.y - player.y;
-		var difAbs = Math.sqrt(difX*difX+difY*difY);
-		boomerang_coordinate.x = player.x + BOOMERANG_RADIUS * difX/difAbs;
-		boomerang_coordinate.y = player.y + BOOMERANG_RADIUS * difY/difAbs;
+		if (is_shooting && aim.alive)
+		{
+			aim.kill();
+		}
+		if (!is_shooting && !aim.alive)
+		{	
+			aim.revive();
+		}
+		if (!is_shooting)
+		{
+			var difX = game.input.x - player.x;
+			var difY = game.input.y - player.y;
+			var difAbs = Math.sqrt(difX*difX+difY*difY);
+			aim.x = player.x + BOOMERANG_RADIUS * difX/difAbs;
+			aim.y = player.y + BOOMERANG_RADIUS * difY/difAbs;
+		}
 	}
 
 	this.init = function() {
@@ -145,7 +222,7 @@ function the_game(game) {
 		create_ground();
 		create_player();
 		create_boomerang();
-		create_boomerang_coordinate();
+		create_aim();
 
 		/* this is here only for debugging */
 		this.player = player
@@ -166,7 +243,7 @@ function the_game(game) {
 		do_rainbow();
 		do_meow();
 		do_boomerang();
-		do_boomerang_coordinate();
+		do_aim();
 	}
 
 	this.nextScreen = function() {
