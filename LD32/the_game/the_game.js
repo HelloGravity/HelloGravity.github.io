@@ -20,8 +20,8 @@ function the_game(game) {
 	function create_ground()
 	{
 		ground = game.add.sprite(0,game.height, 'ground');
-		ground.anchor.set(.5,.5)
-		ground.y -= 0.3*ground.height
+		ground.anchor.set(.5,.3)
+		ground.y -= 0.5*ground.height
 		ground.x += 0.5*ground.width
    	  	game.physics.enable(ground, Phaser.Physics.ARCADE);
    	  	ground.body.immovable = true;
