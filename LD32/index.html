@@ -18,6 +18,17 @@
 	var game, currentScreen;
 
 	window.onload = function() {
+		var isMusic = true;
+		var music;
+		document.getElementById('music').addEventListener('click', function(e){ 
+			isMusic = !isMusic;
+			if(isMusic)
+				music.resume();
+			else 
+				music.pause();
+	        e.preventDefault();
+  		});
+
 		var isDoneLoading = false;
 		var dotsGoingUp = true;
 		/* http://stackoverflow.com/questions/4639716/dot-dotdot-dotdotdot-as-loading-in-js */
@@ -59,7 +70,8 @@
 			
 			/*The end*/
 			game.load.image('endscreen-theend', 'endScreen/theend.png');
-			game.load.audio('audio', ['HeroicAge.mp3', 'HeroicAge.ogg']);
+			game.load.audio('audio', ['the_game/Spazzmatica Polka.mp3', 'Spazzmatica Polka.ogg']);
+			game.load.audio('nyan-audio', ['the_game/Nyan Cat.mp3', 'Nyan Cat.ogg']);
 
 			game.physics.startSystem(Phaser.Physics.ARCADE);
 		}
@@ -70,6 +82,7 @@
 			currentScreen.init();
 
 			music = game.add.audio('audio', 1, true);
+			nyan-music = game.add.audio('nyan-audio', 1, false);
 			music.play();	
 			document.getElementById('music').style.display = "";
 		}

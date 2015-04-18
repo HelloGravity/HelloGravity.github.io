@@ -26,7 +26,7 @@ function the_game(game) {
    	  	game.physics.enable(ground, Phaser.Physics.ARCADE);
    	  	ground.body.immovable = true;
    	  	ground.body.moves = false;
-   	  	ground.body.height *= 0.2;
+   	  	ground.body.height *= 0.1;
 	}
 
 	function create_player()
