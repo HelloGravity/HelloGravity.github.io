@@ -21,12 +21,12 @@ function the_game(game) {
 	{
 		ground = game.add.sprite(0,game.height, 'ground');
 		ground.anchor.set(.5,.5)
-		ground.y -= 0.5*ground.height
+		ground.y -= 0.3*ground.height
 		ground.x += 0.5*ground.width
    	  	game.physics.enable(ground, Phaser.Physics.ARCADE);
    	  	ground.body.immovable = true;
    	  	ground.body.moves = false;
-   	  	ground.body.height *= 0.1;
+   	  	ground.body.height *= 0.2;
 	}
 
 	function create_player()
