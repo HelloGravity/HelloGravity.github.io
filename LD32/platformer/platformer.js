@@ -11,7 +11,7 @@ function platformer(game) {
     	item.scale.x = item.scale.y = 0.1;
 
 
-		player = game.add.sprite(1090,985, 'landedmars-astrowalk');
+		player = game.add.sprite(1090,985, 'menu-menu');
 		game.physics.enable(player, Phaser.Physics.ARCADE);
 		player.animations.add('right', [0, 1, 2, 3], 10, true);
     	player.animations.add('left', [4, 5, 6, 7], 10, true);
