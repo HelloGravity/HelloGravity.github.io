@@ -4,9 +4,9 @@ function the_game(game) {
 	this.init = function() {
 		player = game.add.sprite(36,36, 'meow-the-cat');
 		player.animations.add('fly');
-		player.animations.play('fly');
+		player.animations.play('fly', 17, true);
 		game.physics.enable(player, Phaser.Physics.ARCADE);
-		player.body.gravity.y = 40;
+		player.body.gravity.y = 80;
 		this.player = player;
 	}
 	this.cleanup = function() {
