@@ -6,7 +6,7 @@ function the_game(game) {
 		player.animations.add('fly');
 		player.animations.play('fly');
 		game.physics.enable(player, Phaser.Physics.ARCADE);
-		//player.body.gravity.y = 40;
+		player.body.gravity.y = 40;
 		this.player = player;
 	}
 	this.cleanup = function() {
@@ -14,12 +14,10 @@ function the_game(game) {
 	}
 	this.update = function() {
 		var is_space_pressed = game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR);
-		if (last_is_space_pressed == is_space_pressed)
+		if ((!last_is_space_pressed) && is_space_pressed)
 		{
-
+			player.velocity.y = 150
 		}
-
-
 		last_is_space_pressed = is_space_pressed;
 	}
 
