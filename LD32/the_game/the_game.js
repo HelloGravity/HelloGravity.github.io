@@ -1,26 +1,38 @@
 function the_game(game) {
 	var player;
-	var last_is_space_pressed = false;
+	var rainbows = [];
+
 	this.init = function() {
-		player = game.add.sprite(36,36, 'meow-the-cat');
+		player = game.add.sprite(72,72, 'meow-the-cat');
 		player.animations.add('fly');
+		player.x = 30
+		player.y = 500
 		game.physics.enable(player, Phaser.Physics.ARCADE);
-		player.body.gravity.y = 120;
+		player.body.gravity.y = 320;
 		this.player = player;
+
+		this.player.body.collideWorldBounds = true;
+
+		/* handle spacebar */
+		game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(function() {
+			player.body.velocity.y = -300;
+		}, this);
+
+		/* handle rainbow presses */
+		game.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function() {
+			rainbows.push
+		}, this);
 	}
 	this.cleanup = function() {
+		game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
+		game.input.keyboard.removeKey(Phaser.Keyboard.C);
 		if(player) player.destroy();
 	}
 	this.update = function() {
-		/* handle spacebar presses */
-		var is_space_pressed = game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR);
-		if ((!last_is_space_pressed) && is_space_pressed)
-		{
-			player.body.velocity.y = -150
-		}
-		last_is_space_pressed = is_space_pressed;
-
-		/* change animation according to velocity */
+		/* handle rainbow key presses */
+		 game.input.keyboard.isDown(Phaser.Keyboard.C)
+	
+		/* change meow's animation according to velocity */
 		if (player.body.velocity.y < 0)
 		{
 			player.animations.play('fly', 17, true);
@@ -38,5 +50,4 @@ function the_game(game) {
 		}
 		return null;
 	}
-	
 }
