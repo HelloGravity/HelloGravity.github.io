@@ -16,7 +16,7 @@ function the_game(game) {
 		var is_space_pressed = game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR);
 		if ((!last_is_space_pressed) && is_space_pressed)
 		{
-			player.velocity.y = 150
+			player.body.velocity.y = 150
 		}
 		last_is_space_pressed = is_space_pressed;
 	}
