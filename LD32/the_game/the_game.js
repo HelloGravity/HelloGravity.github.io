@@ -102,6 +102,7 @@ function the_game(game) {
 		new_chicken.body.velocity.x = CHICKEN_SPEED * difX / difAbs;
 		new_chicken.body.velocity.y = CHICKEN_SPEED * difY / difAbs;
 
+		new_chicken.body.immovable = true;
 		new_chicken.animations.add('run');
 		new_chicken.animations.play('run', 10, true);
 
@@ -282,6 +283,7 @@ function the_game(game) {
 	
 	this.update = function() {
 		game.physics.arcade.collide(player, ground);
+		game.physics.arcade.collide(player, chickens);
 
 		do_chicken();
 		do_rainbow();
