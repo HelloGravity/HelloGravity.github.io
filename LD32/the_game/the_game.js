@@ -4,6 +4,9 @@ function the_game(game) {
 	var BOOMERANG_SPEED = 400;
 	var BOOMERANG_SPEED_BACK = 50;
 
+	var CHICKEN_SPEED = 50;
+	var EGG_SPEED = 100;
+
 	/* GAME OBJECTS */
 	var player;
 	var ground;
@@ -88,7 +91,39 @@ function the_game(game) {
 	{
 		var new_chicken = game.add.sprite(32, 32, 'chicken');
 		game.physics.enable(new_chicken, Phaser.Physics.ARCADE);
-		
+		var inner = game.rnd.angle()/180*Math.PI;
+		var outer = game.rnd.angle()/180*Math.PI;
+
+		new_chicken.x = game.world.centerX + 600*Math.max(Math.cos(outer),Math.sin(outer));
+		new_chicken.y = game.world.centerY + 600*Math.min(Math.cos(outer),Math.sin(outer));
+		difX = game.world.centerX + 200*Math.cos(inner) - new_chicken.x;
+		difY = game.world.centerY + 200*Math.sin(inner) - new_chicken.y;
+		difAbs = Math.sqrt(difX*difX + difY*difY);
+		new_chicken.body.velocity.x = CHICKEN_SPEED * difX / difAbs;
+		new_chicken.body.velocity.y = CHICKEN_SPEED * difY / difAbs;
+
+		new_chicken.animations.add('run');
+		new_chicken.animations.play('run', 10, true);
+
+		if (new_chicken.body.velocity.x < 0)
+			new_chicken.scale.x = -1;
+
+        chickens.push(new_chicken);
+	}
+
+	function do_chicken()
+	{
+		if (chickens.length < 7)
+			add_chicken();
+
+		_(chickens).forEach().remove(function(chicken) {
+			return !chicken.inCamera && 
+			((chicken.x - game.world.centerX) * chicken.body.velocity.x > 0 ||
+			(chicken.y - game.world.centerY) * chicken.body.velocity.y > 0);
+		}).forEach(function(chicken) {
+			chicken.destroy();
+		}).value();
+		console.log(chickens.length);
 	}
 
 	function do_rainbow()
@@ -248,6 +283,7 @@ function the_game(game) {
 	this.update = function() {
 		game.physics.arcade.collide(player, ground);
 
+		do_chicken();
 		do_rainbow();
 		do_meow();
 		do_boomerang();
