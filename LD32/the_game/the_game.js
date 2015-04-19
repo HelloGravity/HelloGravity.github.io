@@ -10,6 +10,7 @@ function the_game(game) {
 	var boomerang;
 	var aim;
 	var rainbows = [];
+	var chickens = [];
 
 	/* VARIABLES */
 	var last_velocity = 0;
@@ -82,7 +83,14 @@ function the_game(game) {
 		new_rainbow.body.velocity.x = player.scale.x * 60;
 		rainbows.push(new_rainbow);
 	}
-	
+
+	function add_chicken()
+	{
+		var new_chicken = game.add.sprite(32, 32, 'chicken');
+		game.physics.enable(new_chicken, Phaser.Physics.ARCADE);
+		
+	}
+
 	function do_rainbow()
 	{
 		add_rainbow(player.x + player.width * ((player.scale.x > 0) ? 0.2 : 0.27),player.body.center.y);
