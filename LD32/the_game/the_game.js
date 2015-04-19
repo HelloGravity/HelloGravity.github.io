@@ -20,6 +20,7 @@ function the_game(game) {
 	var current_velocity = 0;
 	var is_shooting = false; // returning is still counted shooting
 	var is_returning = false; 
+	var end_game = false;
 
 	function create_ground()
 	{
@@ -123,7 +124,7 @@ function the_game(game) {
 			(chicken.y - game.world.centerY) * chicken.body.velocity.y > 0);
 		}).forEach(function(chicken) {
 			chicken.destroy();
-		}).value();
+		});
 		console.log(chickens.length);
 	}
 
@@ -283,7 +284,14 @@ function the_game(game) {
 	
 	this.update = function() {
 		game.physics.arcade.collide(player, ground);
-		game.physics.arcade.collide(player, chickens);
+		
+		game.physics.arcade.collide(player, chickens, function() {
+			end_game = true;
+		});
+
+		game.physics.arcade.collide(boomerang, chickens, function(boomerang , chicken) {
+			chicken.destroy();
+		});
 
 		do_chicken();
 		do_rainbow();
@@ -293,7 +301,7 @@ function the_game(game) {
 	}
 
 	this.nextScreen = function() {
-		if(false) {
+		if(end_game) {
 			return new endScreen(game);
 		}
 		return null;
